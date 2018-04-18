@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define HomeCloudWindows_TargetDir=$(var.HomeCloudWindows.TargetDir)?>
+  <?define InstallSummaryCA_TargetDir=$(var.InstallSummaryCA.TargetDir)?>
+  <?define ServiceConfigCA_TargetDir=$(var.ServiceConfigCA.TargetDir)?>
+  <Product Id="*" Name="HomeCloud" Language="1033" Version="1.0.0.0" Manufacturer="Planetludus" UpgradeCode="bd6ece6f-5433-4c1b-989b-0327d777e461">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" AdminImage="yes" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <Feature Id="ProductFeature" Title="HomeCloud" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+    <WixVariable Id="WixUIDialogBmp" Value="img/dialog.bmp" />
+    <!--<WixVariable Id="WixUIExclamationIco" Value="img/info.bmp" />
+    <WixVariable Id="WixUIInfoIco" Value="img/info.bmp" />
+    <WixVariable Id="WixUINewIco" Value="img/info16.bmp" />
+    <WixVariable Id="WixUIUpIco" Value="img/info16.bmp" />-->
+    <Icon Id="icon.ico" SourceFile="img\icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <InstallExecuteSequence>
+      <Custom Action="ShowConfigService" Before="InstallFiles">NOT Installed AND NOT PATCH</Custom>
+      <Custom Action="ShowSummary" Before="InstallFinalize">NOT Installed AND NOT PATCH</Custom>
+    </InstallExecuteSequence>
+  </Product>
+  
+  <Fragment>
+    <Binary Id="SummaryActionBinary" SourceFile="$(var.InstallSummaryCA_TargetDir)InstallSummaryCA.CA.dll" />
+    <CustomAction Id="ShowSummary" BinaryKey="SummaryActionBinary" DllEntry="ShowInstallSummary" Execute="deferred" Return="check" Impersonate="no" />
+  </Fragment>
+
+  <Fragment>
+    <Binary Id="ConfigActionBinary" SourceFile="$(var.ServiceConfigCA_TargetDir)ServiceConfigCA.CA.dll" />
+    <CustomAction Id="ShowConfigService" BinaryKey="ConfigActionBinary" DllEntry="ConfigService" Execute="deferred" Return="check" Impersonate="no" />
+  </Fragment>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="HomeCloud" />
+      </Directory>
+    </Directory>
+
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="HomeCloudWindows.exe" Guid="*">
+        <File Id="HomeCloudWindows.exe" Name="HomeCloudWindows.exe" Source="$(var.HomeCloudWindows_TargetDir)HomeCloudWindows.exe" />
+        <File Id="HomeCloudWindows.exe.config" Name="HomeCloudWindows.exe.config" Source="$(var.HomeCloudWindows_TargetDir)HomeCloudWindows.exe.config" />
+        <ServiceInstall Id="HomeCloudInstaller" Type="ownProcess" Name="HomeCloud" DisplayName="HomeCloud Service"
+                        Description="Sync your mobile phone with your PC" Start="auto" Account="[SERVICEACCOUNT]" Password="[SERVICEPASSWORD]"
+                        ErrorControl="normal" Vital="yes" />
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="both" Name="HomeCloud" Wait="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\HomeCloudWS" Action="createAndRemoveOnUninstall">
+          <RegistryValue Name="port" Type="integer" Value="3999" />
+          <RegistryValue Name="syncFolder" Type="string" Value="C:\Sync" />
+          <RegistryValue Name="password" Type="string" Value="63498c71922f4c09d66754eadcd86c3b" />
+        </RegistryKey>
+      </Component>
+      <!--<Component Id="InstallSummaryCA.dll" Guid="daeb26c9-b2d0-4de1-8015-b650c814ae50">
+        <File Id="InstallSummaryCA.dll" Name="InstallSummaryCA.dll" Source="$(var.InstallSummaryCA_TargetDir)InstallSummaryCA.dll" />
+      </Component>
+      <Component Id="InstallSummaryCA.CA.dll" Guid="c6696b5d-c408-40ae-92b8-e7dc73b2c413">
+        <File Id="InstallSummaryCA.CA.dll" Name="InstallSummaryCA.CA.dll" Source="$(var.InstallSummaryCA_TargetDir)InstallSummaryCA.CA.dll" />
+      </Component>-->
+    </ComponentGroup>
+  </Fragment>
+</Wix>

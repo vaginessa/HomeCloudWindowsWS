@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HomeCloudWindows.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="dateTimeFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">yyyy-MM-dd HH:mm:ss</Value>
+    </Setting>
+    <Setting Name="httpBinding_maxBufferPoolSize" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">2147483647</Value>
+    </Setting>
+    <Setting Name="httpBinding_maxReceivedMessageSize" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">2147483647</Value>
+    </Setting>
+    <Setting Name="httpBinding_maxBufferSize" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">2147483647</Value>
+    </Setting>
+    <Setting Name="fakeUser7572893" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

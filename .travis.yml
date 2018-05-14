@@ -1,0 +1,18 @@
+language: csharp
+solution: HomeCloudWindows.sln
+notifications:
+  email: true
+before_deploy:
+  - git config --local user.name "pablo-dev"
+  - git config --local user.email "pablo.carnero.linan@gmail.com"
+  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key:
+    secure: "QrNCvwmwZex7b4QKFQJwQVVPlIuk4Hc5ZAwG17qIo8Zvp84Tbk4GK49IoEQfW1Yca75lY3sq9YSJWSAJMbhmyhVVULj1512TELO/Mm9SatDRK3lFgRlyDmubUsxZ+IbsQhMZCIEZtqfpeN5ju4/17Qtyc/1+AiqX0tPex0OBTttzpxsOeN0R3lOMopAfQg5tUCmV8KurR6xcmDlrVKqgorbKd3U/GnSiqkvWooIJi46x1vXqcCwcNRKwlwRwkWBcuJfmm7UHAQRbeCyVA7/mBHd3eMryWjMQK00R9IUPC2lOjJcEf4tEjcQbwcxGRLe9f7LDh0I3x/b+1b+B3Yd1E2L0SeSDShSVxv6mXLqbqi8vOzm02ulY9l1z+ezcf6rt0nkwKFYFxowBe2ERaBdbW2FN+oJS1FA1Y0NR5aB+WKhnZ7JD8MOU6FEX0vcfgKNVPMhL4KT2PJFQ7G5VN9YMXQEOvel28CZ6FqZbPudF/pg/YoKNphbBjCD/hB9df2XbxXTZEBGkj01kWIrGYlXB7W5NFAyTVRngChxvMLiyBxLmuMRKF0EXOGDK5LM42mH7ac/JCkQ7FdHPbdXlDfsYosasemziboehRShRIaJ0RKB9ozuq60cYZVOEem+rboX0xMEhtKt/5aFnwkk5tDEfrGcsWm7Uo00aErK5oUkBKiE="
+  file_glob: true
+  file: "SetupProjectV3/**/*.msi"
+  skip_cleanup: true
+  on:
+    branch: master
+repo: pablo-dev/HomeCloudWindowsWS
